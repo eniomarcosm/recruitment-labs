@@ -21,7 +21,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import Footer from '../../@core/components/footer'
 import { CandidaturaData } from '../vagas/publicar'
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, getDocs, query } from 'firebase/firestore'
 import { firestore } from 'src/configs/firebaseConfig'
 import toast from 'react-hot-toast'
 import ModalProgressBar from 'src/components/dialogs/ProgressBar'
@@ -172,7 +172,9 @@ export default function Candidaturas(props) {
       >
         <Container>
           <Toolbar>
-            <img src='/images/logo.jpg' alt='Logo' style={{ height: 50, marginRight: '16px' }} />
+            <Link href='/candidaturas'>
+              <img src='/images/logo.jpg' alt='Logo' style={{ height: 50, marginRight: '16px' }} />
+            </Link>
             <Typography variant='h6' sx={{ flexGrow: 1, fontWeight: 'bold', color: '#FFF' }}></Typography>
             <Link href='#sobre' color='inherit' sx={{ mr: 4, fontSize: '1rem', '&:hover': { color: '#ffdd57' } }}>
               Sobre
@@ -344,7 +346,7 @@ export default function Candidaturas(props) {
                       size='small'
                       color='primary'
                       LinkComponent={Link}
-                      href='/candidaturas/212122'
+                      href={`/candidaturas/${card.id}`}
                       sx={{ '&:hover': { backgroundColor: '#ed6a1b', color: '#FFF' } }}
                     >
                       Ver Detalhes

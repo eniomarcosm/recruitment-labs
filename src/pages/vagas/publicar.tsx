@@ -11,7 +11,7 @@ import {
   InputAdornment,
   MenuItem
 } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import IconifyIcon from 'src/@core/components/icon'
 import CustomTextField from 'src/@core/components/mui/text-field'
@@ -45,9 +45,9 @@ const vagaSchema = z.object({
   linguas_exigidas: z.any()
 })
 
-const nacionalidades = ['Moçambicana', 'Todas']
-const niveis = ['Finalista', 'Licenciado', 'Mestrado', 'Doutoramento']
-const linguas = ['Portugues', 'Inglês', 'Francês', 'Mandarim']
+export const nacionalidades = ['Moçambicana', 'Todas']
+export const niveis = ['Finalista', 'Licenciado', 'Mestrado', 'Doutoramento']
+export const linguas = ['Portugues', 'Inglês', 'Francês', 'Mandarim']
 
 export type CandidaturaData = z.infer<typeof vagaSchema>
 
@@ -280,7 +280,7 @@ export default function PublicarVaga(props) {
                 control={control}
                 render={({ field }) => (
                   <CustomTextField
-                    label='Nível'
+                    label='Grau Académico'
                     fullWidth
                     required
                     defaultValue=''

@@ -38,7 +38,7 @@ const FooterContent = () => {
       {hidden ? null : (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', '& :not(:last-child)': { mr: 4 } }}>
           <Typography target='_blank' component={LinkStyled} href='https://unisced.edu.mz'>
-            VRT
+            {/* VRT */}
           </Typography>
         </Box>
       )}

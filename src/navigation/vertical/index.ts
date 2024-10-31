@@ -187,6 +187,25 @@ const navigation = (): VerticalNavItemsType => {
       action: 'read',
       subject: 'config-session'
     },
+
+    {
+      title: 'Candidaturas',
+      icon: 'tabler:user',
+      children: [
+        {
+          title: 'Listar',
+          action: 'read',
+          path: '/candidatos',
+          subject: 'candidatura'
+        },
+        {
+          title: 'Filtrar',
+          action: 'read',
+          path: '/candidatos/filtrar',
+          subject: 'candidatura-filtrar'
+        }
+      ]
+    },
     {
       sectionTitle: 'Comunicação com Candidatos',
       action: 'read',

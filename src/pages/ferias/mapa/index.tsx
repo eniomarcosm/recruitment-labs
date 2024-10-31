@@ -46,7 +46,7 @@ const marcacaoSchema = z.object({
 
 export type MarcacaoData = z.infer<typeof marcacaoSchema>
 
-const months = [
+export const months = [
   { id: 1, name: 'Janeiro' },
   { id: 2, name: 'Fevereiro' },
   { id: 3, name: 'Março' },

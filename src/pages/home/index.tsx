@@ -192,7 +192,7 @@ const Home = ({}) => {
           </Grid>
         </Card>
 
-        <Card sx={{ mt: 5 }}>
+        {/* <Card sx={{ mt: 5 }}>
           <CardHeader title='Minhas Justifições de Faltas Recentes' />
           <Divider sx={{ my: '0 !important' }} />
           <CardContent>
@@ -213,10 +213,12 @@ const Home = ({}) => {
                   }
                 }}
                 pageSizeOptions={[5, 15, 50]}
-              /> */}
+              />
             </Grid>
           </CardContent>
-        </Card>
+
+
+        </Card>*/}
       </Grid>
     </Grid>
   )
