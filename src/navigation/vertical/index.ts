@@ -168,7 +168,7 @@ const navigation = (): VerticalNavItemsType => {
       icon: 'tabler:user',
       children: [
         {
-          title: 'Publicação',
+          title: 'Criar',
           action: 'read',
           path: '/vagas/publicar',
           subject: 'vacations-history'
@@ -233,10 +233,10 @@ const navigation = (): VerticalNavItemsType => {
           path: '/configurar/departamento'
         },
         {
-          title: 'Cursos',
+          title: 'Áreas de Formação',
           action: 'read',
           subject: 'courses',
-          path: '/configurar/cursos'
+          path: '/configurar/formacao'
         }
       ]
     }

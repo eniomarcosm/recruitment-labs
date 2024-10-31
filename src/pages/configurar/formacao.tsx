@@ -41,7 +41,7 @@ export default function Cursos({}) {
   const getData = async () => {
     try {
       const dptArray: DepartmentData[] = []
-      const querySnapshot = await getDocs(collection(firestore, 'departments'))
+      const querySnapshot = await getDocs(collection(firestore, 'courses'))
 
       querySnapshot.forEach(doc => {
         dptArray.push(doc.data() as DepartmentData)
@@ -62,7 +62,7 @@ export default function Cursos({}) {
 
   const onSubmit = async (values: FieldValues) => {
     try {
-      const newRef = doc(collection(firestore, 'departments'))
+      const newRef = doc(collection(firestore, 'courses'))
 
       await setDoc(newRef, {
         ...values,
@@ -115,7 +115,7 @@ export default function Cursos({}) {
 
   return (
     <Card>
-      <CardHeader title='Cursos' />
+      <CardHeader title='Áreas de Formação' />
       <Divider />
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent>

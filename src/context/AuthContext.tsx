@@ -27,6 +27,7 @@ const defaultProvider: AuthValuesType = {
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { auth, firestore } from 'src/configs/firebaseConfig'
 import { doc, getDoc } from 'firebase/firestore'
+import { jwtDecode } from 'jwt-decode'
 
 const AuthContext = createContext(defaultProvider)
 
@@ -43,6 +44,8 @@ const AuthProvider = ({ children }: Props) => {
   const router = useRouter()
 
   useEffect(() => {
+    setLoading(true)
+
     const initAuth = async (): Promise<void> => {
       const storedUserData = window.localStorage.getItem(authConfig.userData)
       const userData: UserDataType = storedUserData ? JSON.parse(storedUserData) : null
@@ -59,7 +62,7 @@ const AuthProvider = ({ children }: Props) => {
 
           // Check if the token is expired
           // if (decoded.exp && decoded.exp > currentTime) {
-          //   handleLogout()
+          // handleLogout()
           // } else {
           if (storedUserData) {
             setUser({ ...userData })
@@ -98,7 +101,7 @@ const AuthProvider = ({ children }: Props) => {
                 if (staffRes.exists()) {
                   const userData = {
                     uid: response.user.uid,
-                    fullName: response.user.displayName,
+                    fullName: staffRes.data()?.name,
                     email: response.user.email,
                     emailVerified: response.user.emailVerified,
                     phoneNumber: response.user.phoneNumber,

@@ -11,7 +11,7 @@ import {
   InputAdornment,
   MenuItem
 } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import IconifyIcon from 'src/@core/components/icon'
 import CustomTextField from 'src/@core/components/mui/text-field'
@@ -22,8 +22,11 @@ import { z } from 'zod'
 import DatePicker from 'react-datepicker'
 import CustomAutocomplete from 'src/@core/components/mui/autocomplete'
 import { firestore } from 'src/configs/firebaseConfig'
-import { collection, doc, setDoc } from 'firebase/firestore'
+import { collection, doc, getDocs, setDoc } from 'firebase/firestore'
 import toast from 'react-hot-toast'
+import { GeneralData } from '../configurar/departamento'
+import { SelectiveData } from 'src/types/pages/userStaff'
+import { useRouter } from 'next/router'
 
 const vagaSchema = z.object({
   id: z.string().optional(),
@@ -32,6 +35,8 @@ const vagaSchema = z.object({
   idade_min: z.number(),
   idade_max: z.number(),
   data_validade: z.date(),
+  departmento: z.string(),
+  area_formacao: z.string(),
 
   // documentos_exigidos: z.string().array(),
   nivel: z.string(),
@@ -46,7 +51,18 @@ const linguas = ['Portugues', 'Inglês', 'Francês', 'Mandarim']
 
 export type CandidaturaData = z.infer<typeof vagaSchema>
 
-export default function PublicarVaga() {
+export interface GeneralData {
+  id: string
+  name: string
+  shortname: string
+}
+
+export default function PublicarVaga(props) {
+  const [dpts, setDpts] = useState<SelectiveData[]>([])
+  const [courses, setCourse] = useState<SelectiveData[]>([])
+
+  const router = useRouter()
+
   const {
     control,
     handleSubmit,
@@ -57,6 +73,42 @@ export default function PublicarVaga() {
     resolver: zodResolver(vagaSchema)
   })
 
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const dataArray: SelectiveData[] = []
+        const querySnapshot = await getDocs(collection(firestore, 'departments'))
+
+        querySnapshot.forEach(doc => {
+          dataArray.push(doc.data() as SelectiveData)
+        })
+        setDpts(dataArray)
+      } catch (error) {
+        toast.error('Erro ao solicitar dados!')
+        console.log(error)
+      }
+    }
+    getData()
+  }, [])
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const dataArray: SelectiveData[] = []
+        const querySnapshot = await getDocs(collection(firestore, 'courses'))
+
+        querySnapshot.forEach(doc => {
+          dataArray.push(doc.data() as SelectiveData)
+        })
+        setCourse(dataArray)
+      } catch (error) {
+        toast.error('Erro ao solicitar dados!')
+        console.log(error)
+      }
+    }
+    getData()
+  }, [])
+
   const onSubmit = async (values: CandidaturaData) => {
     console.log(values)
 
@@ -65,17 +117,17 @@ export default function PublicarVaga() {
 
       await setDoc(newRef, {
         ...values,
+        createdAt: new Date(),
         id: newRef.id
       })
 
       toast.success('Atualizado com sucesso!')
+      router.replace('/vagas')
     } catch (error) {
       console.log(error)
       toast.error('Erro ao actualizar dados!')
     }
   }
-
-  console.log(errors)
 
   return (
     <Card>
@@ -84,7 +136,7 @@ export default function PublicarVaga() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent>
           <Grid container spacing={6}>
-            <Grid item xs={12} sm={8}>
+            <Grid item xs={12} sm={12}>
               <Controller
                 name='titulo'
                 control={control}
@@ -101,6 +153,57 @@ export default function PublicarVaga() {
               />
             </Grid>
             <Grid item xs={12} sm={4}>
+              <Controller
+                name='departmento'
+                control={control}
+                render={({ field }) => (
+                  <CustomTextField
+                    label='Departmento'
+                    fullWidth
+                    required
+                    defaultValue=''
+                    select
+                    {...field}
+                    error={!!errors.departmento}
+                    placeholder={errors.departmento?.message}
+                  >
+                    {dpts.map(dpt => (
+                      <MenuItem key={dpt.id} value={dpt.id}>
+                        {dpt.name}
+                      </MenuItem>
+                    ))}
+                  </CustomTextField>
+                )}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={4}>
+              <Controller
+                name='area_formacao'
+                control={control}
+                render={({ field }) => (
+                  <CustomAutocomplete
+                    fullWidth
+                    options={courses}
+                    getOptionLabel={option => `${option.name}`}
+                    value={courses.find(option => option.id === field.value) || null}
+                    onChange={(_, selectedOption) => {
+                      field.onChange(selectedOption ? selectedOption.id : '')
+                    }}
+                    renderInput={params => (
+                      <CustomTextField
+                        {...params}
+                        label='Área de Formação'
+                        error={!!errors.area_formacao}
+                        helperText={errors.area_formacao?.message}
+                      />
+                    )}
+                  />
+                )}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={4}>
               <CustomTextField
                 label='Anos de Experiência'
                 required
@@ -111,6 +214,26 @@ export default function PublicarVaga() {
                 {...register('anos_experieriencia', { valueAsNumber: true })}
               />
             </Grid>
+
+            <Grid item xs={12} sm={12}>
+              <Controller
+                name='descricao'
+                control={control}
+                render={({ field }) => (
+                  <CustomTextField
+                    label='Descrição da Vaga'
+                    required
+                    fullWidth
+                    multiline
+                    minRows={4}
+                    error={!!errors.descricao}
+                    placeholder={errors.descricao?.message}
+                    {...field}
+                  />
+                )}
+              />
+            </Grid>
+
             <Grid item xs={12} sm={4}>
               <CustomTextField
                 label='Idade Mínima'
@@ -122,6 +245,7 @@ export default function PublicarVaga() {
                 {...register('idade_min', { valueAsNumber: true })}
               />
             </Grid>
+
             <Grid item xs={12} sm={4}>
               <CustomTextField
                 label='Idade Máxima'
@@ -171,24 +295,6 @@ export default function PublicarVaga() {
                       </MenuItem>
                     ))}
                   </CustomTextField>
-                )}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <Controller
-                name='descricao'
-                control={control}
-                render={({ field }) => (
-                  <CustomTextField
-                    label='Descrição da Vaga'
-                    required
-                    fullWidth
-                    multiline
-                    minRows={4}
-                    error={!!errors.descricao}
-                    placeholder={errors.descricao?.message}
-                    {...field}
-                  />
                 )}
               />
             </Grid>

@@ -14,7 +14,7 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import { styled, useTheme } from '@mui/material/styles'
 import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel'
-import { Button } from '@mui/material'
+import { Divider, Button } from '@mui/material'
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
@@ -42,7 +42,8 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 
-import { cornelderLogoFullText } from 'src/constants/user'
+import { signIn } from 'next-auth/react'
+import { cornelderLogoFullText, uniscedLogoFullText } from 'src/constants/user'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
 
@@ -102,9 +103,11 @@ const schema = yup.object().shape({
 const LoginPage = ({}) => {
   const [rememberMe, setRememberMe] = useState<boolean>(true)
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [isSubmitting, setIsSubmiting] = useState<boolean>(false)
 
   // ** Hooks
   const auth = useAuth()
+
   const theme = useTheme()
 
   // const bgColors = useBgColor()
@@ -125,9 +128,8 @@ const LoginPage = ({}) => {
   })
 
   const onSubmit = async (data: FieldValues) => {
+    setIsSubmiting(true)
     const { email, password } = data
-
-    console.log(data)
 
     // try {
     //   const signInData = await signIn('credentials', {
@@ -143,14 +145,20 @@ const LoginPage = ({}) => {
     // }
 
     // console.log(signInData)
-
-    auth.login({ email, password, rememberMe }, () => {
-      setError('email', {
-        type: 'manual',
-        message: 'Email ou Senha Inválidos'
+    try {
+      auth.login({ email, password, rememberMe }, () => {
+        setError('email', {
+          type: 'manual',
+          message: 'Email ou Senha Inválidos'
+        })
+        toast.error('Email ou Senha Inválidos')
       })
+    } catch (error) {
+      console.log('Erro')
       toast.error('Email ou Senha Inválidos')
-    })
+    } finally {
+      setIsSubmiting(false)
+    }
   }
 
   // const imageSource = skin === 'bordered' ? 'auth-v2-login-illustration-bordered' : 'auth-v2-login-illustration'
@@ -188,17 +196,16 @@ const LoginPage = ({}) => {
             <div style={{ width: '100%', maxWidth: '600px', margin: 'auto', padding: '0 6px' }}>
               <Image
                 src={cornelderLogoFullText}
-                alt='Cornelder de Moçambique'
+                alt='Universidade Jean Piaget de Moçambique'
                 width={400}
-                height={100}
-
-                // layout='responsive'
+                height={120}
+                layout='responsive'
               />
             </div>
 
             <Box sx={{ my: 6 }}>
               {/* <Typography variant='h3' sx={{ mb: 1.5 }}>
-                {`Bem                 vindo ao ${themeConfig.templateName}!`}
+                {`Bem vindo ao ${themeConfig.templateName}!`}
               </Typography> */}
               <Typography sx={{ color: 'text.secondary' }}>Introduza os dados de acesso!</Typography>
             </Box>
@@ -274,7 +281,7 @@ const LoginPage = ({}) => {
                   Esqueceu Senha?
                 </Typography>
               </Box>
-              <Button fullWidth type='submit' variant='contained' sx={{ mb: 4 }}>
+              <Button disabled={isSubmitting} fullWidth type='submit' variant='contained' sx={{ mb: 4 }}>
                 Entrar
               </Button>
               <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -282,6 +289,30 @@ const LoginPage = ({}) => {
                 <Typography href='/register' component={LinkStyled}>
                   Criar Conta
                 </Typography>
+              </Box>
+              <Divider
+                sx={{
+                  color: 'text.disabled',
+                  '& .MuiDivider-wrapper': { px: 6 },
+                  fontSize: theme.typography.body2.fontSize,
+
+                  my: theme => `${theme.spacing(6)} !important`
+                }}
+              >
+                ou
+              </Divider>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Button
+                  fullWidth
+                  color='info'
+                  disabled
+                  variant='contained'
+                  onClick={() => signIn('google', { callBackUrl: 'https://www.google.com' })}
+                  sx={{ mb: 4, border: '4', bgcolor: '#4285f4' }}
+                  startIcon={<Icon icon='mdi:google' />}
+                >
+                  Entrar com Google
+                </Button>
               </Box>
             </form>
           </Box>
