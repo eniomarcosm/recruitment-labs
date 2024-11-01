@@ -24,7 +24,7 @@ import { z } from 'zod'
 const departmentSchema = z.object({
   id: z.string().optional(),
   name: z.string(),
-  shortname: z.string()
+  shortname: z.string().optional().default('')
 })
 
 export type DepartmentData = z.infer<typeof departmentSchema>
@@ -143,7 +143,6 @@ export default function Cursos({}) {
                 render={({ field }) => (
                   <CustomTextField
                     label='Abreviação'
-                    required
                     fullWidth
                     error={!!errors.shortname}
                     placeholder={errors.shortname?.message}

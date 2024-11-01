@@ -73,8 +73,8 @@ export const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
 }))
 
 export const ImgStyled = styled('img')(({ theme }) => ({
-  width: 150,
-  height: 150,
+  width: 80,
+  height: 80,
   marginRight: theme.spacing(6),
   borderRadius: theme.shape.borderRadius,
   objectFit: 'cover'

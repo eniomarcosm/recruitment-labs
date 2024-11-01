@@ -199,18 +199,25 @@ const navigation = (): VerticalNavItemsType => {
           subject: 'candidatura'
         },
         {
-          title: 'Filtrar',
+          title: 'Recrutador',
           action: 'read',
           path: '/candidatos/filtrar',
           subject: 'candidatura-filtrar'
+        },
+        {
+          title: 'Apurados',
+          action: 'read',
+          path: '/candidatos/apurado',
+          subject: 'candidatura-apurado'
         }
       ]
     },
-    {
-      sectionTitle: 'Comunicação com Candidatos',
-      action: 'read',
-      subject: 'config-session'
-    },
+
+    // {
+    //   sectionTitle: 'Comunicação com Candidatos',
+    //   action: 'read',
+    //   subject: 'config-session'
+    // },
     {
       sectionTitle: 'Análise e Relatórios',
       action: 'read',

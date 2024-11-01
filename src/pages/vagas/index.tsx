@@ -10,7 +10,7 @@ import toast from 'react-hot-toast'
 import ModalProgressBar from 'src/components/dialogs/ProgressBar'
 import DialogTransition from 'src/components/dialogs/DialogTransition'
 
-export default function Vagas(props) {
+export default function Vagas({}) {
   const [vagas, setVagas] = useState<CandidaturaData[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
 

@@ -248,7 +248,7 @@ export default function Candidaturas(props) {
           </Typography>
 
           <Grid container spacing={4}>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <Controller
                 name='area_formacao'
                 control={control}
@@ -273,7 +273,7 @@ export default function Candidaturas(props) {
                 )}
               />
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <Controller
                 name='departmento'
                 control={control}
@@ -298,13 +298,13 @@ export default function Candidaturas(props) {
                 )}
               />
             </Grid>
-            <Grid item xs={12} sm={4}>
+            {/* <Grid item xs={12} sm={4}>
               <CustomTextField label='Área de Formação' fullWidth select>
                 <MenuItem value={1}>Área 1</MenuItem>
                 <MenuItem value={2}>Área 2</MenuItem>
                 <MenuItem value={3}>Área 3</MenuItem>
               </CustomTextField>
-            </Grid>
+            </Grid> */}
           </Grid>
 
           <Grid container spacing={4} sx={{ mt: 4 }}>

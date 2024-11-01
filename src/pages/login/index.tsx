@@ -46,6 +46,7 @@ import { signIn } from 'next-auth/react'
 import { cornelderLogoFullText, uniscedLogoFullText } from 'src/constants/user'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
+import IconifyIcon from 'src/@core/components/icon'
 
 // ** Styled Components
 const LoginIllustration = styled('img')(({ theme }) => ({
@@ -284,12 +285,13 @@ const LoginPage = ({}) => {
               <Button disabled={isSubmitting} fullWidth type='submit' variant='contained' sx={{ mb: 4 }}>
                 Entrar
               </Button>
-              <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+              {/* <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Typography sx={{ color: 'text.secondary', mr: 2 }}>Não possui conta?</Typography>
                 <Typography href='/register' component={LinkStyled}>
                   Criar Conta
                 </Typography>
               </Box>
+              */}
               <Divider
                 sx={{
                   color: 'text.disabled',
@@ -314,6 +316,10 @@ const LoginPage = ({}) => {
                   Entrar com Google
                 </Button>
               </Box>
+
+              <IconButton sx={{ backgroundColor: 'tomato', color: 'white' }} LinkComponent={Link} href='/candidaturas'>
+                <IconifyIcon icon='tabler:arrow-back' />
+              </IconButton>
             </form>
           </Box>
         </Box>

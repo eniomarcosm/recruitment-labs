@@ -52,7 +52,7 @@ const renderClient = (row: CandidatoData) => {
 
 const anos = [2023, 2024]
 
-export default function Lista() {
+export default function Lista(props) {
   const [candidatos, setCandidatos] = useState<SelectiveData[]>([])
   const [vagas, setVagas] = useState<SelectiveData[]>([])
   const [cursos, setCursos] = useState<SelectiveData[]>([])
@@ -106,6 +106,25 @@ export default function Lista() {
     getData()
   }, [])
 
+  useEffect(() => {
+    const getData = async () => {
+      setIsLoading(true)
+      try {
+        const vagasArray: SelectiveData[] = []
+        const querySnapshot = await getDocs(collection(firestore, 'candidaturas'))
+        querySnapshot.forEach(doc => {
+          vagasArray.push(doc.data() as SelectiveData)
+        })
+        setCandidatos(vagasArray)
+      } catch (error) {
+        toast.error('Erro ao solicitar dados!')
+        console.log(error)
+      }
+      setIsLoading(false)
+    }
+    getData()
+  }, [])
+
   const columns: GridColDef[] = [
     {
       flex: 0.3,
@@ -122,7 +141,7 @@ export default function Lista() {
               <Typography
                 noWrap
                 component={Link}
-                href={`colaborador/${id}`}
+                href={`#`}
                 sx={{
                   fontWeight: 500,
                   textDecoration: 'none',
@@ -164,7 +183,7 @@ export default function Lista() {
     {
       flex: 0.2,
       field: 'curso',
-      headerName: 'Curso',
+      headerName: 'Área de Formação',
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant='body2' sx={{ color: 'text.primary' }}>
           {cursos.find(cours => cours.id === params.row.curso)?.name}

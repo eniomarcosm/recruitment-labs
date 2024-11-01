@@ -24,7 +24,7 @@ import { z } from 'zod'
 const departmentSchema = z.object({
   id: z.string().optional(),
   name: z.string(),
-  shortname: z.string()
+  shortname: z.string().optional().default('')
 })
 
 export type DepartmentData = z.infer<typeof departmentSchema>
@@ -70,10 +70,10 @@ export default function Departamento({}) {
       })
 
       getData()
-      toast.success('Atualizado com sucesso!')
+      toast.success('Guardado com sucesso!')
     } catch (error) {
       console.log(error)
-      toast.error('Erro ao actualizar dados!')
+      toast.error('Erro ao guardar dados!')
     }
   }
 
@@ -143,7 +143,6 @@ export default function Departamento({}) {
                 render={({ field }) => (
                   <CustomTextField
                     label='Abreviação'
-                    required
                     fullWidth
                     error={!!errors.shortname}
                     placeholder={errors.shortname?.message}
